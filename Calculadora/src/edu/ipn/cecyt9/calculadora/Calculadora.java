@@ -7,8 +7,6 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
-import javax.swing.JButton;
 import javax.swing.JButton;
 
 import javax.swing.JFrame;
@@ -38,7 +36,7 @@ public class Calculadora extends JFrame {
 	/** guarda el resultado de la operacion anterior o el número tecleado */
 	double resultado;
 
-        double resultado2;
+        
 	/** para guardar la operacion a realizar */
 	String operacion;
 
@@ -53,7 +51,7 @@ public class Calculadora extends JFrame {
 	 */
 	public Calculadora() {
 		super();
-		setSize(250, 300);
+		setSize(300, 300);
 		setTitle("Calculadora Simple");
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setResizable(false);
@@ -71,7 +69,7 @@ public class Calculadora extends JFrame {
 		panel.add("North", pantalla);
 
 		panelNumeros = new JPanel();
-		panelNumeros.setLayout(new GridLayout(4, 3));
+		panelNumeros.setLayout(new GridLayout(4, 5));
 		panelNumeros.setBorder(new EmptyBorder(4, 4, 4, 4));
 
 		for (int n = 9; n >= 0; n--) {
@@ -83,13 +81,18 @@ public class Calculadora extends JFrame {
 		panel.add("Center", panelNumeros);
 
 		panelOperaciones = new JPanel();
-		panelOperaciones.setLayout(new GridLayout(6, 1));
+		panelOperaciones.setLayout(new GridLayout(6,1));
 		panelOperaciones.setBorder(new EmptyBorder(4, 4, 4, 4));
 
 		nuevoBotonOperacion("+");
 		nuevoBotonOperacion("-");
 		nuevoBotonOperacion("*");
 		nuevoBotonOperacion("/");
+                nuevoBotonOperacion("^");
+                nuevoBotonOperacion("!");
+                nuevoBotonOperacion("√");
+                nuevoBotonOperacion("%");
+                nuevoBotonOperacion("sen()");
 		nuevoBotonOperacion("=");
 		nuevoBotonOperacion("CE");
 
@@ -168,14 +171,15 @@ public class Calculadora extends JFrame {
 			resultado = 0;
 			pantalla.setText("");
 			nuevaOperacion = true;
-		} else {
+		}
+                else {
 			operacion = tecla;
 			if ((resultado > 0) && !nuevaOperacion) {
 				calcularResultado();
 			} else {
 				resultado = new Double(pantalla.getText());
 			}
-		}
+		} 
 
 		nuevaOperacion = true;
 	}
@@ -192,7 +196,27 @@ public class Calculadora extends JFrame {
 			resultado /= new Double(pantalla.getText());
 		} else if (operacion.equals("*")) {
 			resultado *= new Double(pantalla.getText());
-		}
+		} else if(operacion.equals("^")){
+                        //resultado = Math.pow(resultado, new Double(pantalla.getText()));
+                        double resultado2 =1;
+                        for(double i=1; i<=new Double(pantalla.getText()); i++){
+                        resultado2= resultado2 *resultado;
+                }
+                        resultado = resultado2;
+                }  else if(operacion.equals("!")){
+                        double factorial=1;
+                        while (resultado!=0) {
+                        factorial= factorial*resultado;
+                        resultado--;
+                        }
+                        resultado =  factorial;
+                }else if(operacion.equals("√")){
+                        resultado = Math.pow(resultado, 1/(new Double(pantalla.getText())));               
+                }else if(operacion.equals("%")){
+                         resultado = resultado/100;
+                }else if(operacion.equals("sen()")){
+                        resultado = Math.sin(resultado);
+                }
 
 		pantalla.setText("" + resultado);
 		operacion = "";
